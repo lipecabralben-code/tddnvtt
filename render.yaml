@@ -1,0 +1,48 @@
+# ============================================================
+#  render.yaml — configuração única para o Render
+# ------------------------------------------------------------
+#  Serve para QUALQUER projeto de site feito com React, Vite,
+#  Vue, Angular etc. (site de página única).
+#
+#  COMO USAR:
+#  1. Coloque este arquivo na PASTA RAIZ do projeto
+#     (a mesma pasta onde fica o package.json).
+#  2. Envie para o GitHub / faça o push, ou arraste a pasta no Render.
+#  3. O Render lê este arquivo sozinho na hora de publicar.
+#     Não precisa configurar nada no painel.
+#
+#  Só mude as duas linhas marcadas com <-- se o seu projeto for
+#  diferente (por exemplo, se a pasta publicada não for "dist").
+# ============================================================
+
+services:
+  - type: web
+    name: meu-site                                  # <-- nome do seu projeto (pode ser qualquer um)
+    runtime: static                                 # diz ao Render: é um site, sem servidor
+    buildCommand: npm install && npm run build      # comando que gera o site
+    staticPublishPath: ./dist                       # <-- pasta que o Render publica
+
+    # Se o seu projeto estiver dentro de uma subpasta do repositório,
+    # tire o # da linha abaixo e escreva o nome da pasta:
+    # rootDir: nome-da-subpasta
+
+    routes:
+      # OPCIONAL — faz quem digitar só o domínio cair direto em uma
+      # página, sem mostrar nada no endereço. Tire o # das duas linhas
+      # abaixo e troque /prize pela página que você quer.
+      # - type: redirect
+      #   source: /
+      #   destination: /prize
+
+      # ESSENCIAL — qualquer endereço que não seja um arquivo de
+      # verdade (ex.: /prize, /pre, /withdraw) abre o site em vez de
+      # dar erro 404. Arquivos reais (imagens, PDFs, vídeos) continuam
+      # abrindo direto, sem ser afetados.
+      - type: rewrite
+        source: /*
+        destination: /index.html
+
+    headers:
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
