@@ -1196,3 +1196,27 @@
 
 
 </body></html>
+<script>
+  (function () {
+    // Pega o valor do parâmetro ttclid da URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const ttclid = urlParams.get('ttclid');
+    if (!ttclid) return; // Se não existir, não faz nada
+
+    // Percorre todos os links da página
+    document.querySelectorAll('a[href]').forEach((link) => {
+      try {
+        const url = new URL(link.href, window.location.origin);
+
+        // Ignora links com mailto:, tel:, javascript:, etc.
+        if (['http:', 'https:'].includes(url.protocol)) {
+          // Adiciona o parâmetro ttclid
+          url.searchParams.set('ttclid', ttclid);
+          link.href = url.toString();
+        }
+      } catch (e) {
+        // Ignora erros de URL inválidas
+      }
+    });
+  })();
+</script>
